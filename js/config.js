@@ -88,7 +88,7 @@ window.WEDDING = {
     groom: [
       { role: { ko: "신랑", en: "Groom" }, name: "정해원", bank: "우리은행", number: "1002-844-710619", kakaopay: "" },
       { role: { ko: "신랑 아버지", en: "Groom's father" }, name: "정창현", bank: "○○은행", number: "" },
-      { role: { ko: "신랑 어머니", en: "Groom's mother" }, name: "민승희", bank: "○○은행", number: "" },
+      { role: { ko: "신랑 어머니", en: "Groom's mother" }, name: "강경희", bank: "○○은행", number: "" },
     ],
     bride: [
       { role: { ko: "신부", en: "Bride" }, name: "박진서", bank: "우리은행", number: "1002-948-442489", kakaopay: "" },
