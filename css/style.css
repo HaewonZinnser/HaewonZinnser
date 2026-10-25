@@ -145,15 +145,24 @@ html.lenis, html.lenis body { height: auto; }
 /* ---------- 인사말 ---------- */
 .greeting__msg { font-family: var(--serif); font-size: 15px; line-height: 2.1; margin: 0 0 48px; }
 .divider { width: 1px; height: 40px; background: var(--line); margin: 0 auto 40px; }
-.parents { font-size: 15px; line-height: 2.2; margin-bottom: 36px; }
+.parents { font-size: 15px; line-height: 2.2; margin-bottom: 36px; display: flex; justify-content: center; }
+.parents__grid { display: grid; column-gap: 6px; align-items: baseline; text-align: left; }
+.parents__grid:has(.parents__row--ko) { grid-template-columns: auto auto auto auto; }
+.parents__row--ko { display: contents; }
+/* 영어는 칸 정렬 대신 사람별 두 줄 가운데 정렬 */
+.parents__grid:has(.parents__row--en) { display: block; text-align: center; }
+.parents__row--en { line-height: 1.6; }
+.parents__row--en + .parents__row--en { margin-top: 18px; }
+.parents__row--en .parents__rel { margin: 0 6px; }
+.parents__row--en > span:last-child { display: block; font-size: 14px; }
+.parents__rel--end { text-align: center; }
 .parents__row b { font-weight: 500; }
-.parents__rel { color: var(--muted); font-size: 13px; margin: 0 6px; }
+.parents__rel { color: var(--muted); font-size: 13px; }
 .parents__name { font-family: var(--serif); font-size: 17px; }
 .deceased::before { content: "故 "; color: var(--muted); }
 
 /* ---------- 달력 ---------- */
-.cal__date { font-family: var(--serif); font-size: 17px; margin: 0 0 4px; }
-.cal__time { color: var(--muted); font-size: 14px; margin: 0 0 32px; }
+.cal__date { font-family: var(--serif); font-size: 17px; margin: 0 0 32px; }
 .cal {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -194,6 +203,22 @@ html.lenis, html.lenis body { height: auto; }
 .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
 .gallery button:active img { transform: scale(1.05); }
 .gallery-more { margin-top: 20px; }
+
+/* ---------- 인연이 시작된 지 ---------- */
+.together { margin-top: 64px; }
+.together__lead { font-family: var(--serif); font-size: 15px; margin: 0 0 18px; }
+.together__nums { display: flex; justify-content: center; align-items: baseline; gap: 22px; margin: 0; }
+.together__item { display: inline-flex; align-items: baseline; gap: 6px; }
+.together__num {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.together__unit { font-family: var(--serif); font-size: 13px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+.together__since { margin: 18px 0 0; font-size: 12px; letter-spacing: 0.15em; color: var(--muted); }
 
 .lightbox {
   position: fixed;
@@ -287,10 +312,6 @@ html.lenis, html.lenis body { height: auto; }
 .acct__btns { display: flex; gap: 6px; flex-shrink: 0; }
 .acct__btns .btn { padding: 6px 12px; font-size: 12px; }
 .btn--kakaopay { background: #ffeb00; border-color: #ffeb00; color: #191919; }
-
-/* ---------- 공유 ---------- */
-.share { display: grid; gap: 10px; }
-.btn--kakao { background: #fee500; border-color: #fee500; color: #191919; font-weight: 500; }
 
 .footer {
   padding: 40px 0 calc(env(safe-area-inset-bottom, 0px) + 40px);

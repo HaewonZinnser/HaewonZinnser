@@ -18,8 +18,9 @@
       side: { groom: "신랑", bride: "신부" },
       father: " 아버지",
       mother: " 어머니",
+      // 칸: 부모님 | 의 | 관계 | 이름  (부모님 왼쪽 정렬, 관계 오른쪽 정렬)
       parentRow: function (f, m, rel, name) {
-        return f + " · " + m + '<span class="parents__rel">의 ' + rel + "</span>" + name;
+        return "<span>" + f + " · " + m + '</span><span class="parents__rel">의</span><span class="parents__rel parents__rel--end">' + rel + "</span>" + name;
       },
       dday: function (n, names) {
         return n > 0 ? names + "의 결혼식이 <em>" + n + "일</em> 남았습니다"
@@ -28,6 +29,7 @@
       },
       galleryTitle: "우리의 순간",
       galleryMore: "사진 더보기 +",
+      togetherLead: "서로의 연인이 된 지..",
       photoLabel: function (i) { return "사진 " + i + " 크게 보기"; },
       locationTitle: "오시는 길",
       naver: "네이버 지도", kakao: "카카오맵", tmap: "티맵",
@@ -39,11 +41,6 @@
       holder: "예금주 ",
       copy: "복사",
       acctCopied: "계좌번호가 복사되었습니다",
-      shareTitle: "청첩장 공유하기",
-      shareKakao: "카카오톡으로 공유하기",
-      shareLink: "링크 복사하기",
-      shareButton: "청첩장 보기",
-      linkCopied: "링크가 복사되었습니다",
       copied: "복사되었습니다",
       copyFail: "복사에 실패했습니다",
       footer: "Thank you for celebrating with us",
@@ -60,7 +57,7 @@
       father: "'s father",
       mother: "'s mother",
       parentRow: function (f, m, rel, name) {
-        return name + '<span class="parents__rel">, ' + rel + " of</span>" + f + " & " + m;
+        return name + '<span class="parents__rel">' + rel + " of</span><span>" + f + " & " + m + "</span>";
       },
       dday: function (n, names) {
         return n > 0 ? "<em>" + n + (n === 1 ? " day" : " days") + "</em> until " + names + "'s wedding"
@@ -69,6 +66,7 @@
       },
       galleryTitle: "Our Moments",
       galleryMore: "More photos +",
+      togetherLead: "We have been together for",
       photoLabel: function (i) { return "View photo " + i; },
       locationTitle: "Location",
       naver: "Naver Map", kakao: "Kakao Map", tmap: "TMAP",
@@ -80,11 +78,6 @@
       holder: "Holder: ",
       copy: "Copy",
       acctCopied: "Account number copied",
-      shareTitle: "Share",
-      shareKakao: "Share via KakaoTalk",
-      shareLink: "Copy link",
-      shareButton: "View invitation",
-      linkCopied: "Link copied",
       copied: "Copied",
       copyFail: "Copy failed",
       footer: "Thank you for celebrating with us",
@@ -182,7 +175,7 @@
   }
   function parentRow(side) {
     var s = W[side];
-    return '<div class="parents__row">' +
+    return '<div class="parents__row parents__row--' + lang + '">' +
       L.parentRow(parentName(s.father), parentName(s.mother), esc(t(s.relation)), "<b class=\"parents__name\">" + esc(t(s.firstName)) + "</b>") +
       "</div>";
   }
@@ -200,7 +193,7 @@
       '<div class="reveal"><p class="eyebrow">Invitation</p><h2 class="title">' + esc(t(W.greeting.title)) + "</h2>" +
       '<p class="greeting__msg">' + nl2br(t(W.greeting.message)) + "</p></div>" +
       '<div class="divider"></div>' +
-      '<div class="parents reveal">' + parentRow("groom") + parentRow("bride") + "</div>" +
+      '<div class="parents reveal"><div class="parents__grid">' + parentRow("groom") + parentRow("bride") + "</div></div>" +
       (groom.length || bride.length ? '<button class="btn reveal" data-open-contact>' + L.contact + "</button>" : "");
 
     var rows = function (side, list) {
@@ -231,8 +224,7 @@
 
     $("#calendar").innerHTML =
       '<div class="reveal"><p class="eyebrow">Wedding Day</p>' +
-      '<p class="cal__date">' + dateText() + "</p>" +
-      '<p class="cal__time">' + timeText() + "</p>" +
+      '<p class="cal__date">' + dateText() + " " + timeText() + "</p>" +
       '<div class="cal">' + cells.join("") + "</div>" +
       '<div class="countdown">' +
       ["DAYS", "HOUR", "MIN", "SEC"].map(function (l) {
@@ -265,7 +257,54 @@
         return '<button data-i="' + i + '"' + (i >= preview ? " hidden" : "") + ' aria-label="' + L.photoLabel(i + 1) + '">' +
           '<img src="' + esc(src) + '" alt="" loading="lazy" /></button>';
       }).join("") + "</div>" +
-      (imgs.length > preview ? '<button class="btn gallery-more">' + L.galleryMore + "</button>" : "");
+      (imgs.length > preview ? '<button class="btn gallery-more">' + L.galleryMore + "</button>" : "") +
+      renderTogether();
+  }
+
+  /* ---------- 인연이 시작된 지 (DAYS) ---------- */
+  function together() {
+    var p = W.metDate.split("-").map(Number); // [y, m, d]
+    var n = kst(new Date());
+    var years = n.y - p[0] - (n.m < p[1] || (n.m === p[1] && n.d < p[2]) ? 1 : 0);
+    var days = Math.round((Date.UTC(n.y, n.m - 1, n.d) - Date.UTC(p[0] + years, p[1] - 1, p[2])) / 86400000);
+    return { years: years, days: days, since: p[0] + ". " + pad(p[1]) + ". " + pad(p[2]) };
+  }
+  var togetherDone = false;
+  function renderTogether() {
+    if (!W.metDate) return "";
+    var tg = together();
+    var num = function (v, unit) {
+      return '<span class="together__item"><b class="together__num" data-to="' + v + '">' + (togetherDone ? v : 0) + "</b>" +
+        '<span class="together__unit">' + unit + "</span></span>";
+    };
+    return '<div class="together reveal"><div class="divider"></div><p class="eyebrow">Days</p>' +
+      '<p class="together__lead">' + L.togetherLead + "</p>" +
+      '<p class="together__nums">' + num(tg.years, "Years") + num(tg.days, "Days") + "</p>" +
+      '<p class="together__since">since ' + tg.since + "</p></div>";
+  }
+  // 화면에 들어오면 0부터 숫자가 올라감
+  function setupTogetherCount() {
+    var box = $(".together");
+    if (!box || togetherDone) return;
+    var run = function () {
+      togetherDone = true;
+      var els = box.querySelectorAll("[data-to]");
+      if (reduceMotion) { els.forEach(function (el) { el.textContent = el.dataset.to; }); return; }
+      var t0 = null;
+      (function step(ts) {
+        if (t0 === null) t0 = ts;
+        var k = Math.min(1, (ts - t0) / 1800), e = 1 - Math.pow(1 - k, 3);
+        els.forEach(function (el) { el.textContent = Math.round(el.dataset.to * e); });
+        if (k < 1) requestAnimationFrame(step);
+      })(performance.now());
+      // 프레임이 멈춰 있어도(백그라운드 탭 등) 최종 숫자는 표시
+      setTimeout(function () { els.forEach(function (el) { el.textContent = el.dataset.to; }); }, 2000);
+    };
+    if (!("IntersectionObserver" in window)) return run();
+    var o = new IntersectionObserver(function (en) {
+      if (en[0].isIntersecting) { o.disconnect(); setTimeout(run, 300); }
+    }, { threshold: 0.5 });
+    o.observe(box);
   }
 
   /* ---------- 오시는 길 ---------- */
@@ -314,47 +353,6 @@
       group("groom") + group("bride");
   }
 
-  /* ---------- 공유 ---------- */
-  function renderShare() {
-    $("#share").innerHTML =
-      '<p class="eyebrow reveal">Share</p><h2 class="title reveal">' + L.shareTitle + "</h2>" +
-      '<div class="share reveal"><button class="btn btn--block btn--kakao" id="share-kakao">' + L.shareKakao + "</button>" +
-      '<button class="btn btn--block" id="share-link">' + L.shareLink + "</button></div>";
-  }
-  function shareUrl() {
-    var base = W.siteUrl || location.href.split("?")[0];
-    return lang === "en" ? base + "?lang=en" : base;
-  }
-  function shareKakao() {
-    var url = shareUrl();
-    var title = L.title(t(W.groom.name), t(W.bride.name));
-    var desc = dateText() + " " + timeText() + "\n" + venueText();
-    if (window.Kakao && Kakao.isInitialized()) {
-      Kakao.Share.sendDefault({
-        objectType: "feed",
-        content: {
-          title: title,
-          description: desc,
-          imageUrl: new URL(W.kakao.shareImage, W.siteUrl || location.href).href,
-          link: { mobileWebUrl: url, webUrl: url },
-        },
-        buttons: [{ title: L.shareButton, link: { mobileWebUrl: url, webUrl: url } }],
-      });
-    } else if (navigator.share) {
-      navigator.share({ title: title, text: desc, url: url }).catch(function () {});
-    } else {
-      copy(url, L.linkCopied);
-    }
-  }
-  function loadKakao() {
-    if (!W.kakao || !W.kakao.jsKey) return;
-    var s = document.createElement("script");
-    s.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js";
-    s.crossOrigin = "anonymous";
-    s.onload = function () { if (!Kakao.isInitialized()) Kakao.init(W.kakao.jsKey); };
-    document.head.appendChild(s);
-  }
-
   /* ---------- 이벤트 (한 번만 연결, 다시 그려도 유지) ---------- */
   var lenis = null;
   function lockScroll(on) {
@@ -382,8 +380,6 @@
         var acc = el.parentElement;
         el.setAttribute("aria-expanded", acc.classList.toggle("open"));
       }
-      else if (e.target.closest("#share-link")) copy(shareUrl(), L.linkCopied);
-      else if (e.target.closest("#share-kakao")) shareKakao();
       else if (e.target.closest("#lang-toggle")) setLang(lang === "ko" ? "en" : "ko");
     });
 
@@ -506,8 +502,8 @@
     renderGallery();
     renderLocation();
     renderAccount();
-    renderShare();
     setupReveal(seen);
+    setupTogetherCount();
   }
 
   function setLang(next) {
@@ -525,7 +521,6 @@
   render(false);
   bindEvents();
   setInterval(tick, 1000);
-  loadKakao();
   setupBgm();
   setupPetals();
   setupSmoothScroll();

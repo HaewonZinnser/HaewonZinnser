@@ -69,17 +69,23 @@ window.WEDDING = {
 
   coverImage: "images/cover.jpg",
   gallery: [
-    "images/gallery/01.svg",
-    "images/gallery/02.svg",
-    "images/gallery/03.svg",
-    "images/gallery/04.svg",
-    "images/gallery/05.svg",
-    "images/gallery/06.svg",
-    "images/gallery/07.svg",
-    "images/gallery/08.svg",
-    "images/gallery/09.svg",
+    "images/gallery/01.jpg",
+    "images/gallery/02.jpg",
+    "images/gallery/03.jpg",
+    "images/gallery/04.jpg",
+    "images/gallery/05.jpg",
+    "images/gallery/06.jpg",
+    "images/gallery/07.jpg",
+    "images/gallery/08.jpg",
+    "images/gallery/09.jpg",
+    "images/gallery/10.jpg",
+    "images/gallery/11.jpg",
+    "images/gallery/12.jpg",
   ],
   galleryPreviewCount: 9,
+
+  // 인연이 시작된 날 (갤러리 아래 DAYS)
+  metDate: "2014-06-30",
 
   // 마음 전하실 곳 — TODO: 은행/계좌번호 입력, 필요 없는 줄은 삭제
   accounts: {
@@ -90,20 +96,13 @@ window.WEDDING = {
     ],
     bride: [
       { role: { ko: "신부", en: "Bride" }, name: "박진서", bank: "우리은행", number: "1002-656-509284", kakaopay: "" },
-      { role: { ko: "신부 아버지", en: "Bride's father" }, name: "박장환", bank: "○○은행", number: "" },
-      { role: { ko: "신부 어머니", en: "Bride's mother" }, name: "민승희", bank: "○○은행", number: "" },
+      { role: { ko: "신부 아버지", en: "Bride's father" }, name: "박장환", bank: "신한은행", number: "110-408-827493" },
+      { role: { ko: "신부 어머니", en: "Bride's mother" }, name: "민승희", bank: "우리은행", number: "121-08-027584" },
     ],
   },
 
-  // 카카오톡 공유: https://developers.kakao.com 에서 앱 생성 후 JavaScript 키 입력
-  // (플랫폼 > Web 에 배포 도메인 등록 필요). 비워두면 버튼이 링크 공유로 동작합니다.
-  kakao: {
-    jsKey: "",
-    shareImage: "images/og.jpg",
-  },
-
   // 배경음악 (예: "audio/bgm.mp3"). 비워두면 버튼이 표시되지 않습니다.
-  bgm: "audio/bgm.mp3?v=202610252108",
+  bgm: "audio/bgm.mp3?v=202610252154",
 
   // 벚꽃잎 효과
   petals: true,
