@@ -69,7 +69,7 @@ window.WEDDING = {
   },
 
   // 대표 사진 & 갤러리 — images 폴더의 X 박스 이미지를 실제 사진(jpg)으로 바꾸고 경로를 맞추세요
-  coverImage: "images/cover.svg",
+  coverImage: "images/cover.jpg",
   gallery: [
     "images/gallery/01.svg",
     "images/gallery/02.svg",
@@ -87,13 +87,13 @@ window.WEDDING = {
   accounts: {
     groom: [
       { role: { ko: "신랑", en: "Groom" }, name: "정해원", bank: "우리은행", number: "1002-844-710619", kakaopay: "" },
-      { role: { ko: "신랑 아버지", en: "Groom's father" }, name: "정창현", bank: "○○은행", number: "" },
-      { role: { ko: "신랑 어머니", en: "Groom's mother" }, name: "강경희", bank: "○○은행", number: "" },
+      //{ role: { ko: "신랑 아버지", en: "Groom's father" }, name: "정창현", bank: "○○은행", number: "" },
+      //{ role: { ko: "신랑 어머니", en: "Groom's mother" }, name: "강경희", bank: "○○은행", number: "" },
     ],
     bride: [
       { role: { ko: "신부", en: "Bride" }, name: "박진서", bank: "우리은행", number: "1002-948-442489", kakaopay: "" },
-      { role: { ko: "신부 아버지", en: "Bride's father" }, name: "박장환", bank: "○○은행", number: "" },
-      { role: { ko: "신부 어머니", en: "Bride's mother" }, name: "민승희", bank: "○○은행", number: "" },
+      //{ role: { ko: "신부 아버지", en: "Bride's father" }, name: "박장환", bank: "○○은행", number: "" },
+      //{ role: { ko: "신부 어머니", en: "Bride's mother" }, name: "민승희", bank: "○○은행", number: "" },
     ],
   },
 
