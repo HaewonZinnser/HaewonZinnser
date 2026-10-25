@@ -31,9 +31,8 @@ window.WEDDING = {
 
   venue: {
     name: { ko: "더 컨벤션 신사", en: "The Convention Sinsa" },
-    hall: { ko: "", en: "" }, // TODO: 홀 이름 (예: "3층 그랜드볼룸")
+    hall: { ko: "4층 그랜드볼룸", en: "4F Grand Ballroom" },
     address: { ko: "서울 강남구 강남대로 652", en: "652 Gangnam-daero, Gangnam-gu, Seoul" },
-    // 길찾기 앱에 넘기는 주소(한국 지도 앱은 한글 주소가 정확합니다)
     searchAddress: "서울 강남구 강남대로 652",
     tel: "",
     lat: 37.5197,
@@ -68,7 +67,6 @@ window.WEDDING = {
     },
   },
 
-  // 대표 사진 & 갤러리 — images 폴더의 X 박스 이미지를 실제 사진(jpg)으로 바꾸고 경로를 맞추세요
   coverImage: "images/cover.jpg",
   gallery: [
     "images/gallery/01.svg",
@@ -87,13 +85,13 @@ window.WEDDING = {
   accounts: {
     groom: [
       { role: { ko: "신랑", en: "Groom" }, name: "정해원", bank: "우리은행", number: "1002-844-710619", kakaopay: "" },
-      //{ role: { ko: "신랑 아버지", en: "Groom's father" }, name: "정창현", bank: "○○은행", number: "" },
-      //{ role: { ko: "신랑 어머니", en: "Groom's mother" }, name: "강경희", bank: "○○은행", number: "" },
+      { role: { ko: "신랑 아버지", en: "Groom's father" }, name: "정창현", bank: "하나은행", number: "278-811015-62307" },
+      { role: { ko: "신랑 어머니", en: "Groom's mother" }, name: "강경희", bank: "국민은행", number: "440201-01-256272" },
     ],
     bride: [
-      { role: { ko: "신부", en: "Bride" }, name: "박진서", bank: "우리은행", number: "1002-948-442489", kakaopay: "" },
-      //{ role: { ko: "신부 아버지", en: "Bride's father" }, name: "박장환", bank: "○○은행", number: "" },
-      //{ role: { ko: "신부 어머니", en: "Bride's mother" }, name: "민승희", bank: "○○은행", number: "" },
+      { role: { ko: "신부", en: "Bride" }, name: "박진서", bank: "우리은행", number: "1002-656-509284", kakaopay: "" },
+      { role: { ko: "신부 아버지", en: "Bride's father" }, name: "박장환", bank: "○○은행", number: "" },
+      { role: { ko: "신부 어머니", en: "Bride's mother" }, name: "민승희", bank: "○○은행", number: "" },
     ],
   },
 
