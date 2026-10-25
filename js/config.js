@@ -6,7 +6,7 @@
  * TODO 표시가 있는 곳은 실제 정보로 바꿔 주세요.
  */
 window.WEDDING = {
-  // 배포 URL (공유 기능에 사용) — TODO: 배포 후 실제 주소로 변경
+  // 배포 URL
   siteUrl: "https://haewonzinnser.github.io/",
 
   groom: {
@@ -22,7 +22,7 @@ window.WEDDING = {
     firstName: { ko: "진서", en: "Zinnser" },
     relation: { ko: "딸", en: "daughter" },
     phone: "01045010646",
-    father: { name: { ko: "박장환", en: "JangHwan Park" }, phone: "", deceased: false }, // TODO
+    father: { name: { ko: "박장환", en: "ChangHwan Park" }, phone: "", deceased: false }, // TODO
     mother: { name: { ko: "민승희", en: "SeungHee Min" }, phone: "", deceased: false }, // TODO
   },
 
@@ -87,13 +87,13 @@ window.WEDDING = {
   accounts: {
     groom: [
       { role: { ko: "신랑", en: "Groom" }, name: "정해원", bank: "우리은행", number: "1002-844-710619", kakaopay: "" },
-      { role: { ko: "신랑 아버지", en: "Groom's father" }, name: "○○○", bank: "○○은행", number: "000-0000-0000" },
-      { role: { ko: "신랑 어머니", en: "Groom's mother" }, name: "○○○", bank: "○○은행", number: "000-0000-0000" },
+      { role: { ko: "신랑 아버지", en: "Groom's father" }, name: "정창현", bank: "○○은행", number: "" },
+      { role: { ko: "신랑 어머니", en: "Groom's mother" }, name: "민승희", bank: "○○은행", number: "" },
     ],
     bride: [
       { role: { ko: "신부", en: "Bride" }, name: "박진서", bank: "우리은행", number: "1002-948-442489", kakaopay: "" },
-      { role: { ko: "신부 아버지", en: "Bride's father" }, name: "○○○", bank: "○○은행", number: "000-0000-0000" },
-      { role: { ko: "신부 어머니", en: "Bride's mother" }, name: "○○○", bank: "○○은행", number: "000-0000-0000" },
+      { role: { ko: "신부 아버지", en: "Bride's father" }, name: "박장환", bank: "○○은행", number: "" },
+      { role: { ko: "신부 어머니", en: "Bride's mother" }, name: "민승희", bank: "○○은행", number: "" },
     ],
   },
 
