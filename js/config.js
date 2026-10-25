@@ -81,6 +81,15 @@ window.WEDDING = {
     "images/gallery/10.jpg",
     "images/gallery/11.jpg",
     "images/gallery/12.jpg",
+    "images/gallery/13.jpg",
+    "images/gallery/14.jpg",
+    "images/gallery/15.jpg",
+    "images/gallery/16.jpg",
+    "images/gallery/17.jpg",
+    "images/gallery/18.jpg",
+    "images/gallery/19.jpg",
+    "images/gallery/20.jpg",
+    "images/gallery/21.jpg",
   ],
   galleryPreviewCount: 9,
 
@@ -102,7 +111,7 @@ window.WEDDING = {
   },
 
   // 배경음악 (예: "audio/bgm.mp3"). 비워두면 버튼이 표시되지 않습니다.
-  bgm: "audio/bgm.mp3?v=202610252154",
+  bgm: "audio/bgm.mp3?v=202610252254",
 
   // 벚꽃잎 효과
   petals: true,
