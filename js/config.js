@@ -103,7 +103,7 @@ window.WEDDING = {
   },
 
   // 배경음악 (예: "audio/bgm.mp3"). 비워두면 버튼이 표시되지 않습니다.
-  bgm: "audio/bgm.mp3",
+  bgm: "audio/bgm.mp3?v=202610252108",
 
   // 벚꽃잎 효과
   petals: true,
