@@ -7,7 +7,7 @@
  */
 window.WEDDING = {
   // 배포 URL (공유 기능에 사용) — TODO: 배포 후 실제 주소로 변경
-  siteUrl: "https://haewonzinnser.github.io/HaewonZinnser/",
+  siteUrl: "https://haewonzinnser.github.io/",
 
   groom: {
     name: { ko: "정해원", en: "Haewon Jeong" },
