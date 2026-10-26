@@ -6,6 +6,7 @@
   <title>정해원 ♥ 박진서 결혼합니다</title>
   <meta name="description" content="2027년 2월 13일 토요일, 더 컨벤션 신사" />
   <meta name="theme-color" content="#faf7f2" />
+  <meta name="color-scheme" content="light only" />
 
   <!-- 카카오톡/SNS 링크 미리보기 (크롤러는 JS를 실행하지 않으므로 여기 직접 수정)
        TODO: 배포 후 주소 변경 시 여기도 수정 -->
@@ -19,15 +20,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Great+Vibes&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=202610261435" />
+  <link rel="stylesheet" href="css/style.css?v=202610261446" />
 </head>
 <body>
   <!-- 인트로: 손글씨가 써진 뒤 꽃잎으로 흩날리며 메인 화면으로 -->
   <div id="intro" class="intro" aria-hidden="true">
     <div class="intro__hero">
       <img src="images/intro.jpg" alt="" />
-      <svg class="intro__line intro__line--1" viewBox="0 0 940 1373"><text x="460" y="260" text-anchor="middle">We're Getting</text></svg>
-      <svg class="intro__line intro__line--2" viewBox="0 0 940 1373"><text x="480" y="425" text-anchor="middle">Married!</text></svg>
+      <!-- 글씨는 캔버스로 그림: 안드로이드 다크 모드가 글씨 색을 바꾸지 못하게 (x, y는 그림 940×1373 기준) -->
+      <canvas class="intro__line intro__line--1" data-text="We're Getting" data-x="460" data-y="260"></canvas>
+      <canvas class="intro__line intro__line--2" data-text="Married!" data-x="480" data-y="425"></canvas>
     </div>
     <canvas class="intro__petals"></canvas>
   </div>
@@ -67,7 +69,7 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-  <script src="js/config.js?v=202610261435"></script>
-  <script src="js/main.js?v=202610261435"></script>
+  <script src="js/config.js?v=202610261446"></script>
+  <script src="js/main.js?v=202610261446"></script>
 </body>
 </html>

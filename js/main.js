@@ -472,6 +472,20 @@
     }
 
     // 지금 화면 그대로(그림 + 글씨)를 캔버스에 옮겨 그림
+    var lines = intro.querySelectorAll(".intro__line");
+
+    // 글씨 한 줄을 캔버스에 씀 (s = 그림 940px 기준 배율)
+    function writeLine(g, el, s) {
+      g.font = 138 * s + 'px "Great Vibes"';
+      g.textAlign = "center";
+      g.fillStyle = g.strokeStyle = "#4b3d33";
+      g.lineWidth = 0.6 * s;
+      if ("wordSpacing" in g) g.wordSpacing = 18 * s + "px";
+      var x = el.dataset.x * s, y = el.dataset.y * s;
+      g.fillText(el.dataset.text, x, y);
+      g.strokeText(el.dataset.text, x, y);
+    }
+
     function snapshot(w, h) {
       var c = document.createElement("canvas");
       c.width = w; c.height = h;
@@ -486,16 +500,7 @@
       g.fillStyle = fade;
       g.fillRect(0, 0, w, h);
       g.globalCompositeOperation = "source-over";
-      g.font = 138 * s + 'px "Great Vibes"';
-      g.textAlign = "center";
-      g.fillStyle = g.strokeStyle = "#4b3d33";
-      g.lineWidth = 0.6 * s;
-      if ("wordSpacing" in g) g.wordSpacing = 18 * s + "px";
-      intro.querySelectorAll("text").forEach(function (el) {
-        var x = el.getAttribute("x") * s, y = el.getAttribute("y") * s;
-        g.fillText(el.textContent, x, y);
-        g.strokeText(el.textContent, x, y);
-      });
+      lines.forEach(function (el) { writeLine(g, el, s); });
       return c;
     }
 
@@ -622,6 +627,11 @@
     ]);
     Promise.race([ready, new Promise(function (ok) { setTimeout(ok, 3000); })]).then(function () {
       if (started) return;
+      var dpr = Math.min(devicePixelRatio || 1, 2), w = hero.offsetWidth * dpr, h = w * 1373 / 940;
+      lines.forEach(function (el) {
+        el.width = w; el.height = h;
+        writeLine(el.getContext("2d"), el, w / 940);
+      });
       intro.classList.add("go");
       timer = setTimeout(leave, reduceMotion ? 2500 : HOLD);
     });
