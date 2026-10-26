@@ -1,32 +1,23 @@
-/**
- * 청첩장 데이터 설정 파일
- * 이 파일만 수정하면 청첩장 내용이 바뀝니다.
- * 한국어/영어가 다른 항목은 { ko: "...", en: "..." } 형태로 적습니다.
- * (카카오톡 미리보기 문구/이미지는 index.html 상단 <meta> 태그도 함께 수정하세요)
- * TODO 표시가 있는 곳은 실제 정보로 바꿔 주세요.
- */
 window.WEDDING = {
-  // 배포 URL
   siteUrl: "https://haewonzinnser.github.io/",
 
   groom: {
     name: { ko: "정해원", en: "Haewon Jeong" },
     firstName: { ko: "해원", en: "Haewon" },
     relation: { ko: "아들", en: "son" },
-    phone: "01040161044", // TODO: 비워두면 연락하기 목록에서 빠집니다
-    father: { name: { ko: "정창현", en: "ChangHyeon Jeong" }, phone: "", deceased: false }, // TODO
-    mother: { name: { ko: "강경희", en: "KyungHee Kang" }, phone: "", deceased: false }, // TODO
+    phone: "01040161044",
+    father: { name: { ko: "정창현", en: "ChangHyeon Jeong" }, phone: "", deceased: false },
+    mother: { name: { ko: "강경희", en: "KyungHee Kang" }, phone: "", deceased: false },
   },
   bride: {
     name: { ko: "박진서", en: "Zinnser Park" },
     firstName: { ko: "진서", en: "Zinnser" },
     relation: { ko: "딸", en: "daughter" },
     phone: "01045010646",
-    father: { name: { ko: "박장환", en: "ChangHwan Park" }, phone: "", deceased: false }, // TODO
-    mother: { name: { ko: "민승희", en: "SeungHee Min" }, phone: "", deceased: false }, // TODO
+    father: { name: { ko: "박장환", en: "ChangHwan Park" }, phone: "", deceased: false },
+    mother: { name: { ko: "민승희", en: "SeungHee Min" }, phone: "", deceased: false },
   },
 
-  // 예식 일시 (24시간제, 한국 시간) — TODO: 예식 시간 확인
   date: "2027-02-13T17:00:00+09:00",
 
   venue: {
@@ -93,10 +84,8 @@ window.WEDDING = {
   ],
   galleryPreviewCount: 9,
 
-  // 인연이 시작된 날 (갤러리 아래 DAYS)
   metDate: "2014-06-30",
 
-  // 마음 전하실 곳 — TODO: 은행/계좌번호 입력, 필요 없는 줄은 삭제
   accounts: {
     groom: [
       { role: { ko: "신랑", en: "Groom" }, name: "정해원", bank: "우리은행", number: "1002-844-710619", kakaopay: "" },
@@ -110,16 +99,12 @@ window.WEDDING = {
     ],
   },
 
-  // 카카오톡 공유 카드 (developers.kakao.com 앱의 JavaScript 키, 플랫폼 > Web 에 사이트 도메인 등록 필요)
-  // 버튼은 주소 끝에 ?share 를 붙여 들어갔을 때만 보입니다: https://haewonzinnser.github.io/?share
   kakao: {
     jsKey: "7fa149a8783852aae3facb9934806705",
-    shareImage: { src: "images/share.jpg", width: 940, height: 1253 }, // 인트로 그림 + 글씨 (3:4)
+    shareImage: { src: "images/share.jpg", width: 940, height: 1253 },
   },
 
-  // 배경음악 (예: "audio/bgm.mp3"). 비워두면 버튼이 표시되지 않습니다.
   bgm: "audio/bgm.mp3?v=202610252254",
 
-  // 벚꽃잎 효과
   petals: true,
 };

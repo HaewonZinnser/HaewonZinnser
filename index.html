@@ -8,8 +8,6 @@
   <meta name="theme-color" content="#faf7f2" />
   <meta name="color-scheme" content="light only" />
 
-  <!-- 카카오톡/SNS 링크 미리보기 (크롤러는 JS를 실행하지 않으므로 여기 직접 수정)
-       TODO: 배포 후 주소 변경 시 여기도 수정 -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="정해원 ♥ 박진서 결혼합니다" />
   <meta property="og:description" content="2027년 2월 13일 토요일, 더 컨벤션 신사" />
@@ -22,14 +20,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Great+Vibes&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=202610261614" />
+  <link rel="stylesheet" href="css/style.css?v=202610261625" />
 </head>
 <body>
-  <!-- 인트로: 손글씨가 써진 뒤 꽃잎으로 흩날리며 메인 화면으로 -->
   <div id="intro" class="intro" aria-hidden="true">
     <div class="intro__hero">
       <img src="images/intro.jpg" alt="" />
-      <!-- 글씨는 캔버스로 그림: 안드로이드 다크 모드가 글씨 색을 바꾸지 못하게 (x, y는 그림 940×1373 기준) -->
       <canvas class="intro__line intro__line--1" data-text="We're Getting" data-x="460" data-y="260"></canvas>
       <canvas class="intro__line intro__line--2" data-text="Married!" data-x="480" data-y="425"></canvas>
     </div>
@@ -48,7 +44,6 @@
     <footer class="footer">Thank you for celebrating with us</footer>
   </main>
 
-  <!-- 연락하기 모달 -->
   <div id="contact-modal" class="modal" hidden>
     <div class="modal__backdrop" data-close></div>
     <div class="modal__panel" data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="contact-title">
@@ -58,7 +53,6 @@
     </div>
   </div>
 
-  <!-- 갤러리 라이트박스 -->
   <div id="lightbox" class="lightbox" hidden>
     <button class="lightbox__close" aria-label="Close">&times;</button>
     <button class="lightbox__nav lightbox__nav--prev" aria-label="Previous">&#8249;</button>
@@ -71,7 +65,7 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-  <script src="js/config.js?v=202610261614"></script>
-  <script src="js/main.js?v=202610261614"></script>
+  <script src="js/config.js?v=202610261625"></script>
+  <script src="js/main.js?v=202610261625"></script>
 </body>
 </html>

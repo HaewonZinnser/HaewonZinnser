@@ -5,11 +5,9 @@
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
   var date = new Date(W.date);
 
-  /* ---------- 아이콘 ---------- */
   var ICON_PHONE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>';
   var ICON_SMS = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
 
-  /* ---------- 언어 ---------- */
   var I18N = {
     ko: {
       week: ["일", "월", "화", "수", "목", "금", "토"],
@@ -22,7 +20,6 @@
       side: { groom: "신랑", bride: "신부" },
       father: " 아버지",
       mother: " 어머니",
-      // 칸: 부모님 | 의 | 관계 | 이름  (부모님 왼쪽 정렬, 관계 오른쪽 정렬)
       parentRow: function (f, m, rel, name) {
         return "<span>" + f + " · " + m + '</span><span class="parents__rel">의</span><span class="parents__rel parents__rel--end">' + rel + "</span>" + name;
       },
@@ -102,7 +99,6 @@
   var lang = pickLang();
   var L = I18N[lang];
 
-  // { ko, en } 값이면 현재 언어로, 문자열이면 그대로
   function t(v) {
     if (v && typeof v === "object") return v[lang] != null && v[lang] !== "" ? v[lang] : v.ko;
     return v;
@@ -117,7 +113,6 @@
   function pad(n) { return String(n).padStart(2, "0"); }
   function tel(n) { return String(n).replace(/[^0-9+]/g, ""); }
 
-  // 한국 시간 기준 날짜 구성요소
   function kst(d) {
     var k = new Date(d.getTime() + 9 * 3600 * 1000);
     return { y: k.getUTCFullYear(), m: k.getUTCMonth() + 1, d: k.getUTCDate(), w: k.getUTCDay(), h: k.getUTCHours(), min: k.getUTCMinutes() };
@@ -136,7 +131,6 @@
   }
   function venueText() { return t(W.venue.name) + (t(W.venue.hall) ? " " + t(W.venue.hall) : ""); }
 
-  /* ---------- 토스트 / 복사 ---------- */
   var toastTimer;
   function toast(msg) {
     var el = $("#toast");
@@ -164,7 +158,6 @@
     }
   }
 
-  /* ---------- 커버 ---------- */
   function renderCover() {
     $("#cover").innerHTML =
       '<div class="cover__date">' + D.y + "<strong>" + pad(D.m) + " / " + pad(D.d) + "</strong>" +
@@ -175,7 +168,6 @@
       '<button class="scroll-hint" data-scroll="#greeting">SCROLL ↓</button>';
   }
 
-  /* ---------- 인사말 ---------- */
   function parentName(p) {
     return '<span class="parents__name' + (p.deceased ? " deceased" : "") + '">' + esc(t(p.name)) + "</span>";
   }
@@ -214,7 +206,6 @@
     $("#contact-body").innerHTML = rows("groom", groom) + rows("bride", bride);
   }
 
-  /* ---------- 달력 / D-day ---------- */
   function renderCalendar() {
     var first = new Date(Date.UTC(D.y, D.m - 1, 1)).getUTCDay();
     var last = new Date(Date.UTC(D.y, D.m, 0)).getUTCDate();
@@ -246,13 +237,11 @@
     var v = [Math.floor(s / 86400), Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60];
     nums.forEach(function (n, i) { n.textContent = i ? pad(v[i]) : v[i]; });
 
-    // 날짜 기준 D-day (한국 시간)
     var today = kst(new Date());
     var days = Math.round((Date.UTC(D.y, D.m - 1, D.d) - Date.UTC(today.y, today.m - 1, today.d)) / 86400000);
     $(".dday").innerHTML = L.dday(days, esc(t(W.groom.firstName)) + " ♥ " + esc(t(W.bride.firstName)));
   }
 
-  /* ---------- 갤러리 ---------- */
   var imgs = W.gallery || [];
   var galleryExpanded = false;
   function renderGallery() {
@@ -267,9 +256,8 @@
       renderTogether();
   }
 
-  /* ---------- 인연이 시작된 지 (DAYS) ---------- */
   function together() {
-    var p = W.metDate.split("-").map(Number); // [y, m, d]
+    var p = W.metDate.split("-").map(Number);
     var n = kst(new Date());
     var years = n.y - p[0] - (n.m < p[1] || (n.m === p[1] && n.d < p[2]) ? 1 : 0);
     var days = Math.round((Date.UTC(n.y, n.m - 1, n.d) - Date.UTC(p[0] + years, p[1] - 1, p[2])) / 86400000);
@@ -288,7 +276,6 @@
       '<p class="together__nums">' + num(tg.years, "Years") + num(tg.days, "Days") + "</p>" +
       '<p class="together__since">since ' + tg.since + "</p></div>";
   }
-  // 화면에 들어오면 0부터 숫자가 올라감
   function setupTogetherCount() {
     var box = $(".together");
     if (!box || togetherDone) return;
@@ -303,7 +290,6 @@
         els.forEach(function (el) { el.textContent = Math.round(el.dataset.to * e); });
         if (k < 1) requestAnimationFrame(step);
       })(performance.now());
-      // 프레임이 멈춰 있어도(백그라운드 탭 등) 최종 숫자는 표시
       setTimeout(function () { els.forEach(function (el) { el.textContent = el.dataset.to; }); }, 2000);
     };
     if (!("IntersectionObserver" in window)) return run();
@@ -313,10 +299,9 @@
     o.observe(box);
   }
 
-  /* ---------- 오시는 길 ---------- */
   function renderLocation() {
     var v = W.venue;
-    var nameKo = v.name.ko || v.name; // 한국 지도 앱에는 한글 이름으로 전달
+    var nameKo = v.name.ko || v.name;
     var naver = "https://map.naver.com/p/search/" + encodeURIComponent(v.searchAddress);
     var kakao = "https://map.kakao.com/link/to/" + encodeURIComponent(nameKo) + "," + v.lat + "," + v.lng;
     var tmap = "tmap://route?goalname=" + encodeURIComponent(nameKo) + "&goalx=" + v.lng + "&goaly=" + v.lat;
@@ -339,7 +324,6 @@
       }).join("") + "</div>";
   }
 
-  /* ---------- 마음 전하실 곳 ---------- */
   function renderAccount() {
     var group = function (side) {
       return '<div class="acc reveal"><button class="acc__head" aria-expanded="false">' + L.accountHead[side] + "</button>" +
@@ -359,7 +343,6 @@
       group("groom") + group("bride");
   }
 
-  /* ---------- 이벤트 (한 번만 연결, 다시 그려도 유지) ---------- */
   var lenis = null;
   function lockScroll(on) {
     document.body.style.overflow = on ? "hidden" : "";
@@ -394,7 +377,6 @@
       if (e.target.hasAttribute("data-close")) { modal.hidden = true; lockScroll(false); }
     });
 
-    // 라이트박스
     var lb = $("#lightbox");
     $(".lightbox__close", lb).addEventListener("click", closeLightbox);
     $(".lightbox__nav--prev", lb).addEventListener("click", function () { showPhoto(cur - 1); });
@@ -427,7 +409,6 @@
   function openLightbox(i) { showPhoto(i); $("#lightbox").hidden = false; lockScroll(true); }
   function closeLightbox() { $("#lightbox").hidden = true; lockScroll(false); }
 
-  /* ---------- 카카오톡 공유 (주소 끝에 ?share 를 붙여 들어왔을 때만 버튼 표시) ---------- */
   function setupShare() {
     if (!W.kakao || !W.kakao.jsKey || !new URLSearchParams(location.search).has("share")) return;
     var btn = document.createElement("button");
@@ -444,7 +425,7 @@
 
     btn.addEventListener("click", function () {
       if (!window.Kakao || !Kakao.isInitialized()) return toast("잠시 후 다시 눌러 주세요");
-      var url = W.siteUrl + (lang === "en" ? "?lang=en" : ""); // 공유 링크에는 ?share 가 빠짐
+      var url = W.siteUrl + (lang === "en" ? "?lang=en" : "");
       var img = W.kakao.shareImage;
       Kakao.Share.sendDefault({
         objectType: "feed",
@@ -461,7 +442,6 @@
     });
   }
 
-  /* ---------- BGM ---------- */
   function setupBgm() {
     if (!W.bgm) return;
     var btn = $("#bgm-toggle");
@@ -474,7 +454,6 @@
     });
   }
 
-  /* ---------- 꽃잎 효과 ---------- */
   var reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
   function setupPetals() {
     if (!W.petals || reduceMotion) return;
@@ -490,14 +469,13 @@
     }
   }
 
-  /* ---------- 인트로 (손글씨 → 꽃잎으로 흩날리며 사라짐) ---------- */
   function setupIntro() {
     var intro = $("#intro");
     if (!intro) return;
     var hero = $(".intro__hero", intro), img = $("img", intro);
     var cv = $(".intro__petals", intro), ctx = cv.getContext("2d");
-    var HOLD = 4800;   // 글씨가 다 써진 뒤 감상 시간 포함, 흩날리기 시작까지(ms)
-    var SWEEP = 2600;  // 왼쪽→오른쪽으로 부서지는 시간(ms)
+    var HOLD = 4800;
+    var SWEEP = 2600;
     var PINKS = ["#f4c6cf", "#f9dde2", "#efb3c0", "#f7d4d9", "#e9a8b6"];
     var started = false, timer;
 
@@ -507,16 +485,13 @@
       intro.remove();
     }
 
-    // 지금 화면 그대로(그림 + 글씨)를 캔버스에 옮겨 그림
     var lines = intro.querySelectorAll(".intro__line");
 
-    // 줄마다 테두리 그리기 시작/길이, 색 채우기 시작/길이(ms). CSS의 sweep 시작 시각과 맞춤
     var WRITE = [
       { start: 300, draw: 2000, inkAt: 1460, ink: 770 },
       { start: 1700, draw: 1700, inkAt: 2700, ink: 770 }
     ];
 
-    // 글씨 한 줄을 캔버스에 씀 (s = 그림 940px 기준 배율, draw/ink = 테두리·채우기 진행률 0~1)
     function writeLine(g, el, s, draw, ink) {
       if (draw === undefined) draw = ink = 1;
       var x = el.dataset.x * s, y = el.dataset.y * s, dash = 1400 * s;
@@ -534,7 +509,6 @@
       g.setLineDash([]);
     }
 
-    // 테두리가 먼저 그려지고 색이 채워지는 손글씨 효과
     function animateLines() {
       var t0 = performance.now();
       (function frame(now) {
@@ -557,7 +531,7 @@
       c.width = w; c.height = h;
       var g = c.getContext("2d"), s = w / 940;
       g.drawImage(img, 0, 0, w, h);
-      var fade = g.createLinearGradient(0, 0, 0, h); // CSS mask-image와 같은 위아래 페이드
+      var fade = g.createLinearGradient(0, 0, 0, h);
       fade.addColorStop(0, "rgba(0,0,0,0)");
       fade.addColorStop(0.06, "#000");
       fade.addColorStop(0.94, "#000");
@@ -575,7 +549,6 @@
       started = true;
       clearTimeout(timer);
       intro.classList.add("leaving");
-      // 꽃잎이 날리는 동안에도 바로 스크롤 가능 (꽃잎은 화면에 고정된 캔버스라 스크롤과 무관하게 계속 날림)
       document.documentElement.classList.remove("intro-on");
       lockScroll(false);
 
@@ -586,7 +559,7 @@
       try {
         snap = snapshot(w, h);
         px = snap.getContext("2d").getImageData(0, 0, w, h).data;
-      } catch (e) { px = null; } // 컴퓨터에서 파일로 열면 보안상 픽셀 색을 못 읽음 → 아래에서 그림 조각을 그대로 오려 씀
+      } catch (e) { px = null; }
       if (reduceMotion) {
         hero.style.transition = "opacity 1.2s";
         hero.style.opacity = 0;
@@ -600,7 +573,6 @@
       layer.width = w; layer.height = h;
       var lg = layer.getContext("2d");
 
-      // 그림을 작은 꽃잎 조각들로 나눔 (빈 종이 부분은 가끔 분홍 꽃잎만)
       var parts = [], step = Math.round(6 * dpr);
       for (var y = 0; y < h; y += step) for (var x = 0; x < w; x += step) {
         var ux = x / w * 940, uy = y / h * 1373, col = undefined;
@@ -611,7 +583,7 @@
           if (lum < 228) col = "rgb(" + R + "," + G + "," + B + ")";
           else if (inCouple && lum < 252) col = "rgb(" + (R - 14) + "," + (G - 18) + "," + (B - 22) + ")";
         } else if (inCouple || (uy > 140 && uy < 460 && ux > 80 && ux < 860 && Math.random() < 0.5)) {
-          col = null; // 색을 못 읽으면 글씨·인물 영역은 그림 조각을 꽃잎 모양으로 오려 그림
+          col = null;
         }
         if (col === undefined) {
           if (Math.random() < 0.05) col = PINKS[(Math.random() * PINKS.length) | 0];
@@ -620,7 +592,7 @@
         var at = x / w + (Math.random() - 0.5) * 0.18 - y / h * 0.06;
         parts.push({
           sx: x, sy: y, x: r.left * dpr + x, y: r.top * dpr + y, c: col,
-          t0: (at + 0.25) / 1.5 * SWEEP, // 부서지는 경계선이 이 조각에 닿는 시각(ms)
+          t0: (at + 0.25) / 1.5 * SWEEP,
           sz: (2.2 + Math.random() * 3.2) * dpr,
           vx: (25 + Math.random() * 70) * dpr, vy: -(15 + Math.random() * 65) * dpr,
           rot: Math.random() * 6.28, vr: (Math.random() - 0.5) * 6,
@@ -632,7 +604,7 @@
 
       var start = performance.now();
       (function frame(now) {
-        var edge = -0.25 + (now - start) / SWEEP * 1.5; // 0~1 = 그림 왼쪽~오른쪽
+        var edge = -0.25 + (now - start) / SWEEP * 1.5;
         ctx.clearRect(0, 0, cv.width, cv.height);
 
         if (edge < 1.25) {
@@ -681,12 +653,10 @@
       })(start);
     }
 
-    // 화면을 누르거나 스크롤하려 하면 바로 넘어감
     intro.addEventListener("click", leave);
     intro.addEventListener("touchstart", leave, { passive: true });
     intro.addEventListener("wheel", leave, { passive: true });
 
-    // 글꼴·그림이 준비되면 쓰기 시작 (느린 네트워크면 3초 뒤 그냥 시작)
     var ready = Promise.all([
       document.fonts ? document.fonts.load('138px "Great Vibes"') : null,
       img.decode ? img.decode().catch(function () {}) : null
@@ -704,14 +674,12 @@
     });
   }
 
-  /* ---------- 부드러운 스크롤 (Lenis, PC 마우스 휠) ---------- */
   function setupSmoothScroll() {
     if (!window.Lenis || reduceMotion) return;
     lenis = new Lenis({ duration: 1.2, smoothWheel: true });
     (function raf(time) { lenis.raf(time); requestAnimationFrame(raf); })(0);
   }
 
-  /* ---------- 스크롤 등장 애니메이션 / 커버 패럴랙스 ---------- */
   var io = "IntersectionObserver" in window ? new IntersectionObserver(function (entries) {
     entries.forEach(function (en) {
       if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
@@ -720,7 +688,6 @@
 
   function setupReveal(seen) {
     document.querySelectorAll(".reveal").forEach(function (el) {
-      // 언어 전환으로 다시 그릴 때, 이미 지나간 영역은 바로 표시
       if (!io || (seen && el.getBoundingClientRect().top < innerHeight)) el.classList.add("in");
       else io.observe(el);
     });
@@ -741,7 +708,6 @@
     }, { passive: true });
   }
 
-  /* ---------- 렌더 / 언어 전환 ---------- */
   function render(seen) {
     document.documentElement.lang = lang;
     document.title = L.title(t(W.groom.name), t(W.bride.name));
