@@ -474,16 +474,46 @@
     // 지금 화면 그대로(그림 + 글씨)를 캔버스에 옮겨 그림
     var lines = intro.querySelectorAll(".intro__line");
 
-    // 글씨 한 줄을 캔버스에 씀 (s = 그림 940px 기준 배율)
-    function writeLine(g, el, s) {
+    // 줄마다 테두리 그리기 시작/길이, 색 채우기 시작/길이(ms). CSS의 sweep 시작 시각과 맞춤
+    var WRITE = [
+      { start: 300, draw: 2000, inkAt: 1460, ink: 770 },
+      { start: 1700, draw: 1700, inkAt: 2700, ink: 770 }
+    ];
+
+    // 글씨 한 줄을 캔버스에 씀 (s = 그림 940px 기준 배율, draw/ink = 테두리·채우기 진행률 0~1)
+    function writeLine(g, el, s, draw, ink) {
+      if (draw === undefined) draw = ink = 1;
+      var x = el.dataset.x * s, y = el.dataset.y * s, dash = 1400 * s;
       g.font = 138 * s + 'px "Great Vibes"';
       g.textAlign = "center";
       g.fillStyle = g.strokeStyle = "#4b3d33";
-      g.lineWidth = 0.6 * s;
       if ("wordSpacing" in g) g.wordSpacing = 18 * s + "px";
-      var x = el.dataset.x * s, y = el.dataset.y * s;
+      g.globalAlpha = ink;
       g.fillText(el.dataset.text, x, y);
+      g.globalAlpha = 1;
+      g.lineWidth = (1.4 - 0.8 * ink) * s;
+      g.setLineDash([dash, dash]);
+      g.lineDashOffset = dash * (1 - draw);
       g.strokeText(el.dataset.text, x, y);
+      g.setLineDash([]);
+    }
+
+    // 테두리가 먼저 그려지고 색이 채워지는 손글씨 효과
+    function animateLines() {
+      var t0 = performance.now();
+      (function frame(now) {
+        var t = now - t0, busy = false;
+        lines.forEach(function (el, i) {
+          var T = WRITE[i];
+          var d = Math.min(Math.max((t - T.start) / T.draw, 0), 1);
+          var k = Math.min(Math.max((t - T.inkAt) / T.ink, 0), 1);
+          if (k < 1) busy = true;
+          var g = el.getContext("2d");
+          g.clearRect(0, 0, el.width, el.height);
+          writeLine(g, el, el.width / 940, 1 - (1 - d) * (1 - d), k * k * (3 - 2 * k));
+        });
+        if (busy && !started) requestAnimationFrame(frame);
+      })(t0);
     }
 
     function snapshot(w, h) {
@@ -630,9 +660,10 @@
       var dpr = Math.min(devicePixelRatio || 1, 2), w = hero.offsetWidth * dpr, h = w * 1373 / 940;
       lines.forEach(function (el) {
         el.width = w; el.height = h;
-        writeLine(el.getContext("2d"), el, w / 940);
+        if (reduceMotion) writeLine(el.getContext("2d"), el, w / 940);
       });
       intro.classList.add("go");
+      if (!reduceMotion) animateLines();
       timer = setTimeout(leave, reduceMotion ? 2500 : HOLD);
     });
   }
