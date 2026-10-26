@@ -469,8 +469,6 @@
 
     function finish() {
       intro.remove();
-      document.documentElement.classList.remove("intro-on");
-      lockScroll(false);
     }
 
     // 지금 화면 그대로(그림 + 글씨)를 캔버스에 옮겨 그림
@@ -506,7 +504,9 @@
       started = true;
       clearTimeout(timer);
       intro.classList.add("leaving");
+      // 꽃잎이 날리는 동안에도 바로 스크롤 가능 (꽃잎은 화면에 고정된 캔버스라 스크롤과 무관하게 계속 날림)
       document.documentElement.classList.remove("intro-on");
+      lockScroll(false);
 
       var dpr = Math.min(devicePixelRatio || 1, 2);
       var r = hero.getBoundingClientRect();
@@ -610,8 +610,10 @@
       })(start);
     }
 
-    // 화면을 누르면 바로 넘어감
+    // 화면을 누르거나 스크롤하려 하면 바로 넘어감
     intro.addEventListener("click", leave);
+    intro.addEventListener("touchstart", leave, { passive: true });
+    intro.addEventListener("wheel", leave, { passive: true });
 
     // 글꼴·그림이 준비되면 쓰기 시작 (느린 네트워크면 3초 뒤 그냥 시작)
     var ready = Promise.all([
