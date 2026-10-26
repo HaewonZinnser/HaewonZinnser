@@ -460,7 +460,7 @@
     if (!intro) return;
     var hero = $(".intro__hero", intro), img = $("img", intro);
     var cv = $(".intro__petals", intro), ctx = cv.getContext("2d");
-    var HOLD = 6200;   // 글씨가 다 써진 뒤 감상 시간 포함, 흩날리기 시작까지(ms)
+    var HOLD = 4800;   // 글씨가 다 써진 뒤 감상 시간 포함, 흩날리기 시작까지(ms)
     var SWEEP = 2600;  // 왼쪽→오른쪽으로 부서지는 시간(ms)
     var PINKS = ["#f4c6cf", "#f9dde2", "#efb3c0", "#f7d4d9", "#e9a8b6"];
     var started = false, timer;
