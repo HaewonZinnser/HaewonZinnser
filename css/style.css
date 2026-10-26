@@ -344,8 +344,8 @@ html.lenis, html.lenis body { height: auto; }
 .contact-row small { color: var(--muted); margin-right: 8px; }
 .contact-row .icons { display: flex; gap: 8px; }
 .contact-row .icons a {
-  width: 34px;
-  height: 34px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   border: 1px solid var(--line);
   background: var(--paper);
@@ -353,7 +353,17 @@ html.lenis, html.lenis body { height: auto; }
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  font-size: 14px;
+  color: var(--accent);
+}
+.contact-row .icons svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* ---------- 토스트/BGM ---------- */
