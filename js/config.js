@@ -114,7 +114,7 @@ window.WEDDING = {
   // 버튼은 주소 끝에 ?share 를 붙여 들어갔을 때만 보입니다: https://haewonzinnser.github.io/?share
   kakao: {
     jsKey: "7fa149a8783852aae3facb9934806705",
-    shareImage: { src: "images/og.jpg", width: 447, height: 447 },
+    shareImage: { src: "images/share.jpg", width: 940, height: 1253 }, // 인트로 그림 + 글씨 (3:4)
   },
 
   // 배경음악 (예: "audio/bgm.mp3"). 비워두면 버튼이 표시되지 않습니다.
