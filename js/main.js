@@ -450,6 +450,177 @@
     }
   }
 
+  /* ---------- 인트로 (손글씨 → 꽃잎으로 흩날리며 사라짐) ---------- */
+  function setupIntro() {
+    var intro = $("#intro");
+    if (!intro) return;
+    var hero = $(".intro__hero", intro), img = $("img", intro);
+    var cv = $(".intro__petals", intro), ctx = cv.getContext("2d");
+    var HOLD = 6200;   // 글씨가 다 써진 뒤 감상 시간 포함, 흩날리기 시작까지(ms)
+    var SWEEP = 2600;  // 왼쪽→오른쪽으로 부서지는 시간(ms)
+    var PINKS = ["#f4c6cf", "#f9dde2", "#efb3c0", "#f7d4d9", "#e9a8b6"];
+    var started = false, timer;
+
+    lockScroll(true);
+
+    function finish() {
+      intro.remove();
+      document.documentElement.classList.remove("intro-on");
+      lockScroll(false);
+    }
+
+    // 지금 화면 그대로(그림 + 글씨)를 캔버스에 옮겨 그림
+    function snapshot(w, h) {
+      var c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      var g = c.getContext("2d"), s = w / 940;
+      g.drawImage(img, 0, 0, w, h);
+      var fade = g.createLinearGradient(0, 0, 0, h); // CSS mask-image와 같은 위아래 페이드
+      fade.addColorStop(0, "rgba(0,0,0,0)");
+      fade.addColorStop(0.06, "#000");
+      fade.addColorStop(0.94, "#000");
+      fade.addColorStop(1, "rgba(0,0,0,0)");
+      g.globalCompositeOperation = "destination-in";
+      g.fillStyle = fade;
+      g.fillRect(0, 0, w, h);
+      g.globalCompositeOperation = "source-over";
+      g.font = 138 * s + 'px "Great Vibes"';
+      g.textAlign = "center";
+      g.fillStyle = g.strokeStyle = "#4b3d33";
+      g.lineWidth = 0.6 * s;
+      if ("wordSpacing" in g) g.wordSpacing = 18 * s + "px";
+      intro.querySelectorAll("text").forEach(function (el) {
+        var x = el.getAttribute("x") * s, y = el.getAttribute("y") * s;
+        g.fillText(el.textContent, x, y);
+        g.strokeText(el.textContent, x, y);
+      });
+      return c;
+    }
+
+    function leave() {
+      if (started) return;
+      started = true;
+      clearTimeout(timer);
+      intro.classList.add("leaving");
+      document.documentElement.classList.remove("intro-on");
+
+      var dpr = Math.min(devicePixelRatio || 1, 2);
+      var r = hero.getBoundingClientRect();
+      var w = Math.round(r.width * dpr), h = Math.round(r.height * dpr);
+      var snap, px;
+      try {
+        snap = snapshot(w, h);
+        px = snap.getContext("2d").getImageData(0, 0, w, h).data;
+      } catch (e) { px = null; } // 컴퓨터에서 파일로 열면 보안상 픽셀 색을 못 읽음 → 아래에서 그림 조각을 그대로 오려 씀
+      if (reduceMotion) {
+        hero.style.transition = "opacity 1.2s";
+        hero.style.opacity = 0;
+        setTimeout(finish, 1800);
+        return;
+      }
+
+      cv.width = innerWidth * dpr;
+      cv.height = innerHeight * dpr;
+      var layer = document.createElement("canvas");
+      layer.width = w; layer.height = h;
+      var lg = layer.getContext("2d");
+
+      // 그림을 작은 꽃잎 조각들로 나눔 (빈 종이 부분은 가끔 분홍 꽃잎만)
+      var parts = [], step = Math.round(6 * dpr);
+      for (var y = 0; y < h; y += step) for (var x = 0; x < w; x += step) {
+        var ux = x / w * 940, uy = y / h * 1373, col = undefined;
+        var inCouple = ux > 250 && ux < 720 && uy > 500 && uy < 1270;
+        if (px) {
+          var i = (y * w + x) * 4, R = px[i], G = px[i + 1], B = px[i + 2];
+          var lum = 0.299 * R + 0.587 * G + 0.114 * B;
+          if (lum < 228) col = "rgb(" + R + "," + G + "," + B + ")";
+          else if (inCouple && lum < 252) col = "rgb(" + (R - 14) + "," + (G - 18) + "," + (B - 22) + ")";
+        } else if (inCouple || (uy > 140 && uy < 460 && ux > 80 && ux < 860 && Math.random() < 0.5)) {
+          col = null; // 색을 못 읽으면 글씨·인물 영역은 그림 조각을 꽃잎 모양으로 오려 그림
+        }
+        if (col === undefined) {
+          if (Math.random() < 0.05) col = PINKS[(Math.random() * PINKS.length) | 0];
+          else continue;
+        }
+        var at = x / w + (Math.random() - 0.5) * 0.18 - y / h * 0.06;
+        parts.push({
+          sx: x, sy: y, x: r.left * dpr + x, y: r.top * dpr + y, c: col,
+          t0: (at + 0.25) / 1.5 * SWEEP, // 부서지는 경계선이 이 조각에 닿는 시각(ms)
+          sz: (2.2 + Math.random() * 3.2) * dpr,
+          vx: (25 + Math.random() * 70) * dpr, vy: -(15 + Math.random() * 65) * dpr,
+          rot: Math.random() * 6.28, vr: (Math.random() - 0.5) * 6,
+          ph: Math.random() * 6.28, fl: 2 + Math.random() * 4,
+          life: 2.2 + Math.random() * 1.6
+        });
+      }
+      hero.style.visibility = "hidden";
+
+      var start = performance.now();
+      (function frame(now) {
+        var edge = -0.25 + (now - start) / SWEEP * 1.5; // 0~1 = 그림 왼쪽~오른쪽
+        ctx.clearRect(0, 0, cv.width, cv.height);
+
+        if (edge < 1.25) {
+          lg.globalCompositeOperation = "source-over";
+          lg.clearRect(0, 0, w, h);
+          lg.drawImage(snap, 0, 0);
+          lg.globalCompositeOperation = "destination-out";
+          var gr = lg.createLinearGradient((edge - 0.22) * w, 0, (edge + 0.06) * w, 0);
+          gr.addColorStop(0, "rgba(0,0,0,1)");
+          gr.addColorStop(1, "rgba(0,0,0,0)");
+          lg.fillStyle = gr;
+          lg.fillRect(0, 0, w, h);
+          ctx.drawImage(layer, r.left * dpr, r.top * dpr);
+        }
+
+        var alive = edge < 1.25;
+        for (var k = 0; k < parts.length; k++) {
+          var p = parts[k], a = (now - start - p.t0) / 1000;
+          if (a < 0) { alive = true; continue; }
+          if (a > p.life) continue;
+          alive = true;
+          var dx = p.vx * a + 22 * dpr * a * a + Math.sin(a * 2.2 + p.ph) * 12 * dpr;
+          var dy = p.vy * a + 10 * dpr * a * a;
+          var ang = p.rot + p.vr * a, sy = Math.cos(a * p.fl + p.ph);
+          var co = Math.cos(ang), si = Math.sin(ang);
+          ctx.setTransform(co, si, -si * sy, co * sy, p.x + dx, p.y + dy);
+          ctx.globalAlpha = 1 - a / p.life;
+          ctx.beginPath();
+          ctx.moveTo(0, -p.sz);
+          ctx.quadraticCurveTo(p.sz * 0.85, 0, 0, p.sz);
+          ctx.quadraticCurveTo(-p.sz * 0.85, 0, 0, -p.sz);
+          if (p.c) {
+            ctx.fillStyle = p.c;
+            ctx.fill();
+          } else {
+            ctx.save();
+            ctx.clip();
+            ctx.drawImage(snap, p.sx - p.sz, p.sy - p.sz, p.sz * 2, p.sz * 2, -p.sz, -p.sz, p.sz * 2, p.sz * 2);
+            ctx.restore();
+          }
+        }
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalAlpha = 1;
+        if (alive) requestAnimationFrame(frame);
+        else finish();
+      })(start);
+    }
+
+    // 화면을 누르면 바로 넘어감
+    intro.addEventListener("click", leave);
+
+    // 글꼴·그림이 준비되면 쓰기 시작 (느린 네트워크면 3초 뒤 그냥 시작)
+    var ready = Promise.all([
+      document.fonts ? document.fonts.load('138px "Great Vibes"') : null,
+      img.decode ? img.decode().catch(function () {}) : null
+    ]);
+    Promise.race([ready, new Promise(function (ok) { setTimeout(ok, 3000); })]).then(function () {
+      if (started) return;
+      intro.classList.add("go");
+      timer = setTimeout(leave, reduceMotion ? 2500 : HOLD);
+    });
+  }
+
   /* ---------- 부드러운 스크롤 (Lenis, PC 마우스 휠) ---------- */
   function setupSmoothScroll() {
     if (!window.Lenis || reduceMotion) return;
@@ -524,5 +695,6 @@
   setupBgm();
   setupPetals();
   setupSmoothScroll();
+  setupIntro();
   setupParallax();
 })();
