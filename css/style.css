@@ -419,6 +419,24 @@ html.lenis, html.lenis body { height: auto; }
   to { transform: translate(var(--drift), 105vh) rotate(540deg); }
 }
 
+/* ---------- 카카오톡 공유 버튼 (?share 일 때만) ---------- */
+.share-kakao {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 20px);
+  transform: translateX(-50%);
+  z-index: 85;
+  padding: 14px 26px;
+  border: 0;
+  border-radius: 999px;
+  background: #fee500;
+  color: #191919;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+}
+
 /* ---------- 인트로 ---------- */
 html.intro-on body { overflow: hidden; }
 html.intro-on .cover > * { animation-play-state: paused; }

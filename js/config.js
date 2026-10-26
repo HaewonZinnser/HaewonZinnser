@@ -110,6 +110,13 @@ window.WEDDING = {
     ],
   },
 
+  // 카카오톡 공유 카드 (developers.kakao.com 앱의 JavaScript 키, 플랫폼 > Web 에 사이트 도메인 등록 필요)
+  // 버튼은 주소 끝에 ?share 를 붙여 들어갔을 때만 보입니다: https://haewonzinnser.github.io/?share
+  kakao: {
+    jsKey: "7fa149a8783852aae3facb9934806705",
+    shareImage: { src: "images/og.jpg", width: 447, height: 447 },
+  },
+
   // 배경음악 (예: "audio/bgm.mp3"). 비워두면 버튼이 표시되지 않습니다.
   bgm: "audio/bgm.mp3?v=202610252254",
 

@@ -38,6 +38,7 @@
       locationTitle: "오시는 길",
       naver: "네이버 지도", kakao: "카카오맵", tmap: "티맵",
       copyAddr: "주소 복사", callVenue: "예식장 전화",
+      shareKakao: "카카오톡으로 공유하기", shareButton: "청첩장 보기",
       addrCopied: "주소가 복사되었습니다",
       accountTitle: "마음 전하실 곳",
       accountMsg: "참석이 어려우신 분들을 위해<br>계좌번호를 기재하였습니다.<br>너그러운 마음으로 양해 부탁드립니다.",
@@ -75,6 +76,7 @@
       locationTitle: "Location",
       naver: "Naver Map", kakao: "Kakao Map", tmap: "TMAP",
       copyAddr: "Copy address", callVenue: "Call venue",
+      shareKakao: "Share via KakaoTalk", shareButton: "View invitation",
       addrCopied: "Address copied",
       accountTitle: "Sending Your Love",
       accountMsg: "For those who are unable to attend,<br>we have shared our account details below.<br>Thank you for your kind understanding.",
@@ -425,6 +427,40 @@
   function openLightbox(i) { showPhoto(i); $("#lightbox").hidden = false; lockScroll(true); }
   function closeLightbox() { $("#lightbox").hidden = true; lockScroll(false); }
 
+  /* ---------- 카카오톡 공유 (주소 끝에 ?share 를 붙여 들어왔을 때만 버튼 표시) ---------- */
+  function setupShare() {
+    if (!W.kakao || !W.kakao.jsKey || !new URLSearchParams(location.search).has("share")) return;
+    var btn = document.createElement("button");
+    btn.id = "share-kakao";
+    btn.className = "share-kakao";
+    btn.textContent = L.shareKakao;
+    document.body.appendChild(btn);
+
+    var s = document.createElement("script");
+    s.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js";
+    s.crossOrigin = "anonymous";
+    s.onload = function () { if (!Kakao.isInitialized()) Kakao.init(W.kakao.jsKey); };
+    document.head.appendChild(s);
+
+    btn.addEventListener("click", function () {
+      if (!window.Kakao || !Kakao.isInitialized()) return toast("잠시 후 다시 눌러 주세요");
+      var url = W.siteUrl + (lang === "en" ? "?lang=en" : ""); // 공유 링크에는 ?share 가 빠짐
+      var img = W.kakao.shareImage;
+      Kakao.Share.sendDefault({
+        objectType: "feed",
+        content: {
+          title: L.title(t(W.groom.name), t(W.bride.name)),
+          description: dateText() + " " + timeText() + "\n" + venueText(),
+          imageUrl: new URL(img.src, W.siteUrl).href,
+          imageWidth: img.width,
+          imageHeight: img.height,
+          link: { mobileWebUrl: url, webUrl: url }
+        },
+        buttons: [{ title: L.shareButton, link: { mobileWebUrl: url, webUrl: url } }]
+      });
+    });
+  }
+
   /* ---------- BGM ---------- */
   function setupBgm() {
     if (!W.bgm) return;
@@ -713,6 +749,7 @@
     btn.textContent = L.switchTo;
     btn.setAttribute("aria-label", L.switchLabel);
     $(".footer").textContent = L.footer;
+    if ($("#share-kakao")) $("#share-kakao").textContent = L.shareKakao;
 
     renderCover();
     renderGreeting();
@@ -740,6 +777,7 @@
   bindEvents();
   setInterval(tick, 1000);
   setupBgm();
+  setupShare();
   setupPetals();
   setupSmoothScroll();
   setupIntro();
