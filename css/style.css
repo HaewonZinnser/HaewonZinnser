@@ -355,6 +355,7 @@ html.lenis, html.lenis body { height: auto; }
   text-decoration: none;
   color: var(--accent);
 }
+.btn svg,
 .contact-row .icons svg {
   width: 20px;
   height: 20px;
@@ -365,6 +366,7 @@ html.lenis, html.lenis body { height: auto; }
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.btn svg { width: 15px; height: 15px; flex: none; }
 
 /* ---------- 토스트/BGM ---------- */
 .toast {
